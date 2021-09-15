@@ -43,6 +43,12 @@ THEN I am again presented with current and future conditions for that city
 
 ![Official Screenshot](./assets/_guide/Assets/06-server-side-apis-homework-demo.png)
 
+## Screenshot
+
+* Here is a screenshot of my developed real application:
+
+![Official Screenshot](./assets/_guide/Assets/screenshot.png)
+
 
 ## Frameworks and Libraries
 The following frameworks are used in this application
