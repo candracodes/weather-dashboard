@@ -161,16 +161,16 @@ h2,
 .h2 {
     font-size: 21px;
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 @media (min-width: 992px) {
 
     h2,
     .h2 {
-        font-size: 30px;
+        font-size: 21px;
         margin-top: 26.66667px;
-        margin-bottom: 26.66667px;
+        margin-bottom: 10px;
     }
 }
 
@@ -1662,11 +1662,11 @@ nav .cart-wrapper.open {
     8. City Results
     ----------------------------------
 */
-#city-result {
+#city-result-h2 {
     /* This identifier is strictly reserved for displaying the city result from search params */
 }
 
-#city-result-sidebar {
+#city-result-ul {
     /* This ID is strictly for city results in the sidebar */
 }
 
@@ -2642,12 +2642,12 @@ footer .footer-social li a {
 /*  ----------------------------------
     15. Weather Cards
     ---------------------------------- */
-.todays-forecast {
+.todays-forecast-container {
     margin-bottom: 15px;
     margin-right: 0;
 }
 
-.todays-forecast ul {
+.todays-forecast-container ul {
     list-style: none;
 }
 

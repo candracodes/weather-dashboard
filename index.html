@@ -65,7 +65,7 @@
                         <input type="text" class="form-control search-input" placeholder="Enter City..."
                             aria-label="Enter City" aria-describedby="button-addon4">
                         <div class="input-group-append" id="button-addon4">
-                            <button class="btn btn-primary" type="button">Search</button>
+                            <button id="search-btn" class="btn btn-primary" type="button">Search</button>
                             <button class="btn btn-dark" type="button">Clear History</button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
 
                 <div id="sidebar-status" class="col-md-3 col-xs-12 sidebar-status">
                     <div class="filters">
-                        <ul id="city-result-sidebar" class="product-category">
+                        <ul id="city-result-ul" class="product-category">
                             <li id="city-result-list-item"><a href="#">Stored City</a></li>
 
                         </ul>
@@ -96,12 +96,12 @@
                     <!-- CITY HEADER -->
                     <div class="sort-bar clearfix">
                         <div class="sort-results pull-left">
-                            <p id="city-result">City</p>
+                            <h2 id="city-result-h2">City</h2>
                         </div>
                     </div>
 
                     <!-- ======================== START: TODAY'S FORECAST ======================== -->
-                    <div class="row todays-forecast">
+                    <div class="row todays-forecast-container">
                         <div class="col-12">
                             <h4>Today's Forecast</h4>
                             <div class="card">
