@@ -42,7 +42,7 @@ var getRequestedCity = function (city) {
   // https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid={API key}
 
   // Define a variable that constructs a query URL to make the API call based on city name:
-  var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + openWeatherAPIKey;
+  var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + openWeatherAPIKey;
 
   var uviURL = "";
 
