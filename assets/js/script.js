@@ -30,7 +30,7 @@ var getRequestedCity = function (city) {
     // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key};
 
     // Define a variable that constructs a query URL to make the API call based on city name:
-    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + openWeatherAPIKey;
+    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + openWeatherAPIKey;
 
     // Make API call using fetch  
     fetch(queryURL)
@@ -42,9 +42,11 @@ var getRequestedCity = function (city) {
             // possibly call another function that actually prints the response to the page?
           });
         } else {
+            // TODO: I got this else statement from a classwork assignment. I'd like to know a little more about statusText
           alert('Error: ' + response.statusText);
         }
       })
+      // TODO: find out more about what catch is... I think I must have been writing notes when this was covered
       .catch(function (error) {
         alert('Unable to locate city');
       });
