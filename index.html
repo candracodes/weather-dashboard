@@ -66,7 +66,7 @@
                             aria-label="Enter City" aria-describedby="button-addon4">
                         <div class="input-group-append" id="button-addon4">
                             <button id="search-btn" class="btn btn-primary" type="button">Search</button>
-                            <button class="btn btn-dark" type="button">Clear History</button>
+                            <button id="clear-btn" class="btn btn-dark" type="button">Clear History</button>
                         </div>
                     </div>
                 </div>
@@ -103,15 +103,13 @@
                     <!-- ======================== START: TODAY'S FORECAST ======================== -->
                     <div class="row todays-forecast-container">
                         <div class="col-12">
-                            <h4>Today's Forecast</h4>
+                            <!-- TODO: Don't forget to add if statements to change the color of this span based on if the weather if favorable -->
+                            <h4><i id="condition-color"class="fas fa-circle"></i> Today's Forecast</h4>
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Date</h5>
-                                    <ul>
-                                        <li>Icon</li>
-                                        <li>Temp</li>
-                                        <li>Wind</li>
-                                        <li>Humidity</li>
+                                    <h5 id="todays-forecast-date" class="card-title">Date</h5>
+                                    <ul id="todays-forecast-ul">
+                                        <!-- LI ELEMENTS DYNAMICALLY CREATED ON SCRIPT.JS -->
                                     </ul>
                                 </div>
                             </div>
@@ -212,7 +210,7 @@
     <!-- /END: wrapper -->
     <!-- JQUERY JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- MOMENT JS (MAY DELETE IF NOT NEEDED) -->
+    <!-- MOMENT JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <!-- CUSTOM JS -->
     <script src="./assets/js/script.js"></script>

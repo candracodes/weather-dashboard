@@ -18,7 +18,8 @@
     13. Wave background
     14. Search Form
     15. Weather Cards
-    16. Other
+    16. Condition Color
+    17. 0ther
   
     ----------------------------------
     Note to reviewer:
@@ -2642,6 +2643,10 @@ footer .footer-social li a {
 /*  ----------------------------------
     15. Weather Cards
     ---------------------------------- */
+.todays-icon {
+    width:50px;
+    height: 50px;
+}
 .todays-forecast-container {
     margin-bottom: 15px;
     margin-right: 0;
@@ -2668,5 +2673,14 @@ footer .footer-social li a {
 }
 
 /*  ----------------------------------
-    16. Other
+    16. Condition Color
+    ---------------------------------- */
+
+#condition-color {
+    /* styling will change in script.js */
+    font-size: small;
+}
+
+/*  ----------------------------------
+    17. Other
     ---------------------------------- */
