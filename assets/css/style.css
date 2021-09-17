@@ -2654,6 +2654,7 @@ footer .footer-social li a {
 
 .todays-forecast-container ul {
     list-style: none;
+    padding-left: 0;
 }
 
 .weather-card-container {
@@ -2670,6 +2671,7 @@ footer .footer-social li a {
 
 .weather-card ul {
     list-style: none;
+    padding-left: 0;
 }
 
 /*  ----------------------------------
