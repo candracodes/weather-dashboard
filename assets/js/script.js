@@ -15,10 +15,10 @@ var openWeatherAPIKey = "e5e3b0ace283e06f86b26937890c837a";
 var city = "";
 var previousCity;
 
-// DISPLAY TODAY'S DATE
-// DISPLAY THE DATE
+// DEFINE TODAY'S DATE HTML ELEMENT
 var todaysDate = $("#todays-forecast-date");
 
+// DISPLAY TODAY'S DATE
 function displayCurrentDate() {
   var rightNow = moment().format('MMM DD, YYYY');
   todaysDate.text(rightNow);
@@ -66,7 +66,7 @@ var getRequestedCity = function (city) {
           // Convert Kelvin to Fahrenheit:
           // (K − 273.15) × 9/5 + 32 = °F. (where K is the value the computer initially spews)
 
-          // DISPLAY TEMPERATURE (NOTE: this could be achieved by simply referring to the metric parameter, but I want to hold on to this formula in case I need it in the future)
+          // DISPLAY TEMPERATURE (NOTE: this could be achieved by simply referring to the unit: imperial parameter, but I want to hold on to this formula in case I need it in the future)
           $("#todays-forecast-ul").append("<li>Temp: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)) + "° </li>");
           // DISPLAY WIND SPEED
           $("#todays-forecast-ul").append("<li>Wind: " + data.wind.speed + " mph</li>");
@@ -111,7 +111,7 @@ function getFiveDayForecast(city) {
       q: city,
       appid: openWeatherAPIKey,
       units: "imperial",
-      cnt: "10"
+      cnt: "5"
     },
     success: function (data) {
       // TEST: Display all data to examine the keys and values
@@ -122,8 +122,18 @@ function getFiveDayForecast(city) {
       var constructUI = "";
       // Run a loop that construct the full blue weather card
       $.each(data.list, function (index, val) {
+        // Construct a way to display the actual names of the days of the week
+        // ========================
+        let dayData = data.list[index];
+        let dayTimeUTC = dayData.dt;
+        let timeZoneOffset = data.city.timezone;
+        let timeZoneOffsetHours = timeZoneOffset / 60 / 60;
+        let thisMoment = moment.unix(dayTimeUTC).utc().utcOffset(timeZoneOffsetHours);
+
+        console.log("The days of the week are: " + thisMoment.format('MM/DD/YY'));
+        // ========================
         // Open the beginning of column, and weather card
-        constructUI += "<div class='card weather-card'><div class='card-body'><h5 class='card-title'>" + index + "</h5><ul>"
+        constructUI += "<div class='card weather-card'><div class='card-body'><h5 class='card-title'>" + thisMoment.format('MM/DD/YY') + "</h5><ul>"
         // ADD Icon
         constructUI += "<li><img src='https://openweathermap.org/img/w/" + val.weather[0].icon + ".png'></li>";
 
