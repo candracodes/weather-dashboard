@@ -59,7 +59,7 @@ var getRequestedCity = function (city) {
 
           // To define an icon, you need to create a URL constructed like this => http://openweathermap.org/img/wn/10d@2x.png
           // Create variable to construct icon URL
-          var imgIcon = "<img class='todays-icon' src='http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png' />";
+          var imgIcon = "<img class='todays-icon' src='https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png' />";
           // DISPLAY ICON with imgIcon variable
           $("#todays-forecast-ul").append("<li>" + imgIcon + "</li>");
 
@@ -115,9 +115,12 @@ $("#search-btn").on("click", function () {
 
 // 6. Add event listener for clear button
 $("#clear-btn").on("click", function () {
+  // CLEAR THE SEARCH INPUT FIELD
+  $(".search-input").val("");
   // CLEAR TODAY'S FORECAST
   document.getElementById('todays-forecast-ul').innerHTML='';
   //CLEAR THE CITY <H2>
   document.getElementById('city-result-h2').innerHTML='';
+  // CLEARING LOCAL STORAGE FOR FUTURE SAVED RESULTS
   localStorage.clear();
 });
