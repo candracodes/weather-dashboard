@@ -75,9 +75,11 @@ var getRequestedCity = function (city) {
 
           // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
           // DISPLAY UV INDEX
-          $("#todays-forecast-ul").append("<li>UV Index: Unknown</li>");
+          // $("#todays-forecast-ul").append("<li>UV Index: Unknown</li>");
+          $("#todays-forecast-ul").append("<li></li>");
 
-          // TODO: Stop this function from concatenating additional UL elements after the search button is clicked. It should only display one result
+          // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
+          getFiveDayForecast(data)
 
         });
       } else {
@@ -92,26 +94,29 @@ var getRequestedCity = function (city) {
 };
 
 // 2. getFiveDayForecast() | Create a function that displays the 5 day forecase of the requested city
-function getFiveDayForecast(city) {
+function getFiveDayForecast(cityData) {
   // ******* Starting over completely from scratch. The vanila Javascript just wasn't doing the trick for me
 
-  // Collect the user entered city value
-  city = $(".search-input").val();
+  // Defining the first portion of the openweathermap API url (This doesn't give a full five days, it's hourly and only for today and tomorrow)
+  // var queryFiveDayURL = "https://api.openweathermap.org/data/2.5/forecast";
 
-  // Defining the first portion of the openweathermap API url 
-  var queryFiveDayURL = "https://api.openweathermap.org/data/2.5/forecast";
+  //EXAMPLE:
+  // https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+  var queryFiveDayURL = "https://api.openweathermap.org/data/2.5/onecall";
 
+  console.log(cityData);
   // "Fetching" the data by constructing with ajax
   $.ajax({
     url: queryFiveDayURL,
     dataType: "json",
     type: "GET",
     data: {
-      // parameters and documentation found here: https://openweathermap.org/forecast5
-      q: city,
+      // parameters and documentation found here: https://openweathermap.org/api/one-call-api
+      // Adding the Lat and Lon coordinates to marry the 2 endpoints
+      lat: cityData.coord.lat,
+      lon: cityData.coord.lon,
       appid: openWeatherAPIKey,
-      units: "imperial",
-      cnt: "5"
+      units: "imperial"
     },
     success: function (data) {
       // TEST: Display all data to examine the keys and values
@@ -121,30 +126,25 @@ function getFiveDayForecast(city) {
       // Create empty string to use in various was for UI elements
       var constructUI = "";
       // Run a loop that construct the full blue weather card
-      $.each(data.list, function (index, val) {
-        // Construct a way to display the actual names of the days of the week
-        // ========================
-        let dayData = data.list[index];
-        let dayTimeUTC = dayData.dt;
-        let timeZoneOffset = data.city.timezone;
-        let timeZoneOffsetHours = timeZoneOffset / 60 / 60;
-        let thisMoment = moment.unix(dayTimeUTC).utc().utcOffset(timeZoneOffsetHours);
+      $.each(data.daily.slice(1,6), function (index, val) {
+        // I worked through this solution with the BCS rep. I've never used Intl.DateTimeFormat but it saved me a ton of time from having to do Momentjs conversions
+        const date = Intl.DateTimeFormat("en-US", {month :"short", day: "2-digit", year:"numeric"}).format(new Date(val.dt*1000));
 
-        console.log("The days of the week are: " + thisMoment.format('MM/DD/YY'));
+        console.log("The days of the week are: " + date);
         // ========================
-        // Open the beginning of column, and weather card
-        constructUI += "<div class='card weather-card'><div class='card-body'><h5 class='card-title'>" + thisMoment.format('MM/DD/YY') + "</h5><ul>"
+        // Open the beginning of column + weather card + Display the date for the next 5 days
+        constructUI += "<div class='card weather-card'><div class='card-body'><h5 class='card-title'>" + date + "</h5><ul>"
         // ADD Icon
         constructUI += "<li><img src='https://openweathermap.org/img/w/" + val.weather[0].icon + ".png'></li>";
 
         // ADD Temp + Round the decimal
-        constructUI += "<li>Temp: " + Math.floor(val.main.temp) + "°F</li>";
+        constructUI += "<li>Temp: " + Math.floor(val.temp.max) + "°F</li>";
 
         // ADD Wind
-        constructUI += "<li>Wind: " + val.wind.speed + " mph</li>";
+        constructUI += "<li>Wind: " + val.wind_speed + " mph</li>";
 
         // ADD Humidity
-        constructUI += "<li>Humidity: " + val.main.humidity + " %</li>";
+        constructUI += "<li>Humidity: " + val.humidity + " %</li>";
 
         // CLOSE Entire UI Element
         constructUI += "</ul></div></div>";
@@ -171,7 +171,7 @@ function clearPreviousCities() {
 $("#search-btn").on("click", function () {
 
   getRequestedCity();
-  getFiveDayForecast();
+  // getFiveDayForecast();
 
 });
 
