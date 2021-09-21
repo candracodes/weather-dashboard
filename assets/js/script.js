@@ -18,7 +18,7 @@ THINGS THAT WORK:
 
 // These elements are necessary for local storage items in the sidebar
 var currentCity = "";
-var lastCity = "";
+// var lastCity = "";
 
 /* ================================================================================== */
 
@@ -69,8 +69,6 @@ var getRequestedCity = function (city) {
       if (response.ok) {
         response.json().then(function (data) {
           console.log(data);
-          // attempting to save to local storage.
-          storePreviousCities(city);
 
           // Display the City <H2>
           $("#city-result-h2").text(data.name);
@@ -176,79 +174,57 @@ function getFiveDayForecast(cityData) {
 
 }
 
-// 3. storePreviousCities() | Create a function that stores previously searched city results, makes it an <a>, and, if clicked, replaces the today's forecast and 5 day forecast with chosen city
-function storePreviousCities(newCity) {
+/* ================================================================================== */
+
+/* 
+  ================================================================
+  TODO: NEW APPROACH TO STORING AND DISPLAYING CITIES IN SIDEBAR
+  ================================================================
+*/
+
+// TODO: STEP 1 - DEFINE VARIABLES
+var cityListEl = document.querySelector('#city-result-ul');
+var citySearchEl = document.querySelector('#city-value');
+
+// TODO: STEP 2 - CREATE FUNCTION THAT CREATES SIDEBAR LIST ITEMS
+function storePreviousCities() {
+
   console.log("storePreviousCities function triggered");
-  // Assuming it's a user's first time here, then this "false" is a true statement and I want to default to this
-  var cityExists = false;
+  cityListEl.innerHTML += '<li>' + citySearchEl.value + '</li>';
+  localStorage.setItem('StoredCities', cityListEl.innerHTML);
+  // TODO: Try to figure out a way to make list items clickable and to display previously searched city results in main section
+  
+}
 
-  // Check to see if City boolean is true, i.e. "Is there anything in storage"
-  for (let i = 0; i < localStorage.length; i++) {
-      if (localStorage["cities" + i] === newCity) {
-          cityExists = true;
-          break;
-      }
+// TODO: STEP 3 - SHOW PREVIOUS CITIES
+function viewPreviousCities() {
+  // Check for saved cities
+  var savedCities = localStorage.getItem('StoredCities');
+
+  // If there are any saved cities, update our list
+  if (savedCities) {
+    // Show city list
+    cityListEl.innerHTML = savedCities;
+
   }
-  // Add to local storage if the city is new
-  if (cityExists === false) {
-      localStorage.setItem('cities' + localStorage.length, newCity);
-  }
-}
+};
 
-// 4. showPreviousCities() | Create a function that actually constructs the city results in sidebar and makes them clickable
-function showPreviousCities() {
-  console.log("showPreviousCities function triggered");
+// TODO: STEP 4 - CALL THE VIEW PREVIOUS CITIES FUNCTION
+viewPreviousCities();
 
-  if (localStorage.length===0){
-    if (lastCity){
-        $('#search-input').attr("value", lastCity);
-    } else {
-        $('#search-input').attr("value", "Dallas");
-    }
-} else {
-    // Build key of last city written to localStorage
-    let lastCityKey="cities"+(localStorage.length-1);
-    lastCity=localStorage.getItem(lastCityKey);
-    // Set search input to last city searched
-    $('#search-input').attr("value", lastCity);
-    // Append stored cities to page
-    for (let i = 0; i < localStorage.length; i++) {
-        let city = localStorage.getItem("cities" + i);
-        let cityEl;
-        // Set to lastCity if currentCity not set
-        if (currentCity===""){
-            currentCity=lastCity;
-        }
-        // Set button class to active for currentCity
-        if (city === currentCity) {
-            cityEl = `<li class="city-result-list-item"><a onclick="getRequestedCity()">${city}</a></li>`;
-        } else {
-            cityEl = `<li class="city-result-list-item"><a onclick="getRequestedCity()">${city}</a></li>`;
-        } 
-        // Append city to page
-        $('#city-result-ul').prepend(cityEl);
-    }
-}
-}
+/* ================================================================================== */
 
-// 5. Add event listener for search button
+// 3. Add event listener for search button
 $("#search-btn").on("click", function () {
-
+  // get today's forecast (which calls the 5 day forecast inside of the function)
   getRequestedCity();
-  currentCity = $('#search-input').val();
-  showPreviousCities();
-
-});
-// 6. Add event listener to make historical data clickable
-$("#city-result-ul").on("click", function (event) {
-  // TODO: not exactly working how I want, but maybe I can fix this and resubmit homework
-  event.preventDefault();
-  $('#search-input').val(event.target.textContent);
-  currentCity = $('#search-input').val();
+  
+  // TODO: STEP 5: DISPLAY PREVIOUSLY SEARCHED CITIES IN SIDEBAR
+  storePreviousCities();
 
 });
 
-// 7. Add event listener for clear button
+// 4. Add event listener for clear button
 $("#clear-btn").on("click", function () {
   // CLEAR THE SEARCH INPUT FIELD
   $(".search-input").val("");
@@ -256,12 +232,12 @@ $("#clear-btn").on("click", function () {
   document.getElementById('todays-forecast-ul').innerHTML = '';
   //CLEAR THE CITY <H2>
   document.getElementById('city-result-h2').innerHTML = '';
-  // CLEAR SIDEBAR RESULTS
-  $( "#city-result-ul" ).empty();
+  
   // TODO: FIGURE OUT A WAY TO CLEAR OUT THE 5 DAY FORECAST
   // CLEARING LOCAL STORAGE
   localStorage.clear();
-});
 
-// 8. Call the function to display previously searched cities
-showPreviousCities();
+  // CLEAR SIDEBAR
+  document.getElementById('city-result-ul').innerHTML = '';
+  
+});
