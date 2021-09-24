@@ -73,22 +73,16 @@ var getRequestedCity = function (city) {
           // Display the City <H2>
           $("#city-result-h2").text(data.name);
 
-          // To define an icon, you need to create a URL constructed like this => http://openweathermap.org/img/wn/10d@2x.png
           // Create variable to construct icon URL
           var imgIcon = "<img class='todays-icon' src='https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png' />";
-          // DISPLAY ICON with imgIcon variable
-          $("#todays-forecast-ul").append("<li>" + imgIcon + "</li>");
-
-          // To display the temperature, the results are in a format called "Kelvin" and needs to be converted with a formula
-          // Convert Kelvin to Fahrenheit:
-          // (K − 273.15) × 9/5 + 32 = °F. (where K is the value the computer initially spews)
-
-          // DISPLAY TEMPERATURE (NOTE: this could be achieved by simply referring to the unit: imperial parameter, but I want to hold on to this formula in case I need it in the future)
-          $("#todays-forecast-ul").append("<li>Temp: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)) + "° </li>");
-          // DISPLAY WIND SPEED
-          $("#todays-forecast-ul").append("<li>Wind: " + data.wind.speed + " mph</li>");
-          // DISPLAY HUMIDITY
-          $("#todays-forecast-ul").append("<li>Humidity: " + data.main.humidity + "%</li>");
+          // DISPLAY ICON
+          $("#temp-icon-id").html(imgIcon);
+          // TEMP
+          $("#temperature-id").text("Temperature: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)));
+          // WIND SPEED
+          $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
+          // HUMIDITY
+          $("#humidity-id").text("Humidity: " + data.main.humidity  + "%");
 
           // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
           // DISPLAY UV INDEX
@@ -97,6 +91,8 @@ var getRequestedCity = function (city) {
 
           // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
           getFiveDayForecast(data)
+
+          // TODO: IDEA... should I build you the functionality for the sidebar HERE instead of in the below functions?
 
         });
       } else {
@@ -174,6 +170,8 @@ function getFiveDayForecast(cityData) {
 
 }
 
+
+
 /* ================================================================================== */
 
 /* 
@@ -189,9 +187,12 @@ var citySearchEl = document.querySelector('#city-value');
 // TODO: STEP 2 - CREATE FUNCTION THAT CREATES SIDEBAR LIST ITEMS
 function storePreviousCities() {
 
+  // TODO: IDEA! SHOULD I CREATE THE LINKS HERE OR IN THE FORECAST FUNCTION?
+  // ========================================================================
+
   console.log("storePreviousCities function triggered");
   cityListEl.innerHTML += '<li>' + citySearchEl.value + '</li>';
-  localStorage.setItem('StoredCities', cityListEl.innerHTML);
+  localStorage.setItem('StoredCities', citySearchEl.value);
   // TODO: Try to figure out a way to make list items clickable and to display previously searched city results in main section
   
 }
@@ -200,17 +201,72 @@ function storePreviousCities() {
 function viewPreviousCities() {
   // Check for saved cities
   var savedCities = localStorage.getItem('StoredCities');
-
+  console.log(savedCities);
+  console.log(typeof savedCities);
   // If there are any saved cities, update our list
   if (savedCities) {
     // Show city list
-    cityListEl.innerHTML = savedCities;
+    cityListEl.innerHTML = '<li>' + savedCities + '</li>';
 
   }
 };
 
 // TODO: STEP 4 - CALL THE VIEW PREVIOUS CITIES FUNCTION
 viewPreviousCities();
+
+// TODO: NEW EVENT LISTENER FOR LIST ITEMS IN SIDEBAR
+$("#city-result-ul").on("click", "li", function(){
+  console.log($(this).text());
+
+  var city = $(this).text();
+  // define list item
+
+  // Define a variable that constructs a query URL to make the API call based on city name:
+  var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + openWeatherAPIKey;
+
+  // Make API call using fetch  
+  fetch(queryURL)
+    .then(function (response) {
+      if (response.ok) {
+        response.json().then(function (data) {
+          console.log(data);
+
+          // Display the City <H2>
+          $("#city-result-h2").text(data.name);
+
+          // Create variable to construct icon URL
+          var imgIcon = "<img class='todays-icon' src='https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png' />";
+          // DISPLAY ICON
+          $("#temp-icon-id").html(imgIcon);
+          // TEMP
+          $("#temperature-id").text("Temperature: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)));
+          // WIND SPEED
+          $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
+          // HUMIDITY
+          $("#humidity-id").text("Humidity: " + data.main.humidity  + "%");
+
+
+          // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
+          // DISPLAY UV INDEX
+          //TODO:  $("#todays-forecast-ul").append("<li>UV Index: Unknown</li>");
+
+
+          // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
+          getFiveDayForecast(data)
+
+          // TODO: IDEA... should I build you the functionality for the sidebar HERE instead of in the below functions?
+
+        });
+      } else {
+        // Error handling for errors that are number based like 404, 505, etc
+        alert('Error: ' + response.statusText);
+      }
+    })
+    // Error handling if the error is anything other than the numbered responses
+    .catch(function (error) {
+      alert('Unable to locate city');
+    });
+});
 
 /* ================================================================================== */
 
@@ -241,3 +297,35 @@ $("#clear-btn").on("click", function () {
   document.getElementById('city-result-ul').innerHTML = '';
   
 });
+
+// TODO: REFER TO THIS CLASS EXAMPLE ON HOW TO CONSTRUCT A URL FROM SIDEBAR CITIES:
+/*
+function classExample() {
+  for (var i = 0; i < repos.length; i++) {
+    var repoName = repos[i].owner.login + '/' + repos[i].name;
+
+    var repoEl = document.createElement('a');
+    repoEl.classList = 'list-item flex-row justify-space-between align-center';
+    repoEl.setAttribute('href', './single-repo.html?repo=' + repoName);
+
+    var titleEl = document.createElement('span');
+    titleEl.textContent = repoName;
+
+    repoEl.appendChild(titleEl);
+
+    var statusEl = document.createElement('span');
+    statusEl.classList = 'flex-row align-center';
+
+    if (repos[i].open_issues_count > 0) {
+      statusEl.innerHTML =
+        "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + ' issue(s)';
+    } else {
+      statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
+    }
+
+    repoEl.appendChild(statusEl);
+
+    repoContainerEl.appendChild(repoEl);
+  }
+}
+*/
