@@ -1,4 +1,4 @@
-# weather-dashboard
+# Weather Dashboard
 This is a simple weather dashboard application intended for frequent travelers looking to check the 5-day weather forecast of their desired destination city.
 
 ## Important URLs
@@ -63,4 +63,7 @@ The following frameworks are used in this application
 ## Licensing
 The project is made possible with the following Licensing:
 - [MIT](license.txt)
+
+## Contact Developer
+For additional information, contact this application's developer: letschat@candracodes.com
 
