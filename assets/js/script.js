@@ -8,11 +8,8 @@ THINGS THAT WORK:
 */
 /* ========================================================================================================== */
 
-// TODO: 1. Figre out a way to display locally stored results immediately after a user hits "Search", and NOT JUST after a user clicks Search for the second time
-// TODO: 2. Figure out how to stop "Today's Forecast" from duplicating when a user enters a new city. It should obliterate the previous "Today's Forecast"
-// TODO: 3. Figure out how to cross-reference endpoints so I can display the UV Index in Today's Forecast
-// TODO: 4. Once UV Index is working, add conditional statements that will display color options for classes like: favorable, moderate, and severe
-// TODO: 5. Figure out a way to prevent the "Error: Bad Request" when a user clicks on a city result
+// TODO: 1. Figure out how to cross-reference endpoints so I can display the UV Index in Today's Forecast
+// TODO: 2. Once UV Index is working, add conditional statements that will display color options for classes like: favorable, moderate, and severe
 
 /* ================================================================================== */
 
@@ -92,8 +89,6 @@ var getRequestedCity = function (city) {
           // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
           getFiveDayForecast(data)
 
-          // TODO: IDEA... should I build you the functionality for the sidebar HERE instead of in the below functions?
-
         });
       } else {
         // Error handling for errors that are number based like 404, 505, etc
@@ -165,39 +160,36 @@ function getFiveDayForecast(cityData) {
       });
       // Append the UI elements to the parent HTML element
       $(".weather-card-container").html(constructUI);
+
+      // SHOW TODAY'S FORECAST CONTAINER
+      $( ".todays-forecast-container").show();
     }
   });
 
 }
 
-
-
 /* ================================================================================== */
 
 /* 
   ================================================================
-  TODO: NEW APPROACH TO STORING AND DISPLAYING CITIES IN SIDEBAR
+  NEW APPROACH TO STORING AND DISPLAYING CITIES IN SIDEBAR
   ================================================================
 */
 
-// TODO: STEP 1 - DEFINE VARIABLES
+// STEP 1 - DEFINE VARIABLES
 var cityListEl = document.querySelector('#city-result-ul');
 var citySearchEl = document.querySelector('#city-value');
 
-// TODO: STEP 2 - CREATE FUNCTION THAT CREATES SIDEBAR LIST ITEMS
+// STEP 2 - CREATE FUNCTION THAT CREATES SIDEBAR LIST ITEMS
 function storePreviousCities() {
-
-  // TODO: IDEA! SHOULD I CREATE THE LINKS HERE OR IN THE FORECAST FUNCTION?
-  // ========================================================================
 
   console.log("storePreviousCities function triggered");
   cityListEl.innerHTML += '<li>' + citySearchEl.value + '</li>';
   localStorage.setItem('StoredCities', citySearchEl.value);
-  // TODO: Try to figure out a way to make list items clickable and to display previously searched city results in main section
   
 }
 
-// TODO: STEP 3 - SHOW PREVIOUS CITIES
+// STEP 3 - SHOW PREVIOUS CITIES
 function viewPreviousCities() {
   // Check for saved cities
   var savedCities = localStorage.getItem('StoredCities');
@@ -211,10 +203,10 @@ function viewPreviousCities() {
   }
 };
 
-// TODO: STEP 4 - CALL THE VIEW PREVIOUS CITIES FUNCTION
+// STEP 4 - CALL THE VIEW PREVIOUS CITIES FUNCTION
 viewPreviousCities();
 
-// TODO: NEW EVENT LISTENER FOR LIST ITEMS IN SIDEBAR
+// STEP 5 — NEW EVENT LISTENER FOR LIST ITEMS IN SIDEBAR
 $("#city-result-ul").on("click", "li", function(){
   console.log($(this).text());
 
@@ -248,13 +240,16 @@ $("#city-result-ul").on("click", "li", function(){
 
           // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
           // DISPLAY UV INDEX
-          //TODO:  $("#todays-forecast-ul").append("<li>UV Index: Unknown</li>");
 
 
           // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
           getFiveDayForecast(data)
 
-          // TODO: IDEA... should I build you the functionality for the sidebar HERE instead of in the below functions?
+          // SHOW 5 DAY CONTAINER
+          $( ".weather-card" ).show();
+
+          // SHOW TODAY'S FORECAST CONTAINER
+          $( ".todays-forecast-container").show();
 
         });
       } else {
@@ -275,8 +270,14 @@ $("#search-btn").on("click", function () {
   // get today's forecast (which calls the 5 day forecast inside of the function)
   getRequestedCity();
   
-  // TODO: STEP 5: DISPLAY PREVIOUSLY SEARCHED CITIES IN SIDEBAR
+  // DISPLAY PREVIOUSLY SEARCHED CITIES IN SIDEBAR
   storePreviousCities();
+
+  // SHOW 5 DAY CONTAINER
+  $( ".weather-card" ).show();
+
+  // SHOW TODAY'S FORECAST CONTAINER
+  $( ".todays-forecast-container").show();
 
 });
 
@@ -285,11 +286,20 @@ $("#clear-btn").on("click", function () {
   // CLEAR THE SEARCH INPUT FIELD
   $(".search-input").val("");
   // CLEAR TODAY'S FORECAST
-  document.getElementById('todays-forecast-ul').innerHTML = '';
+  // document.getElementById('todays-forecast-ul').innerHTML = '';
   //CLEAR THE CITY <H2>
   document.getElementById('city-result-h2').innerHTML = '';
+
+  // HIDE TODAY'S FORECAST CONTAINER
+  $( ".todays-forecast-container").hide();
+  
   
   // TODO: FIGURE OUT A WAY TO CLEAR OUT THE 5 DAY FORECAST
+  $( ".weather-card" ).hide();
+  
+  
+
+  
   // CLEARING LOCAL STORAGE
   localStorage.clear();
 
@@ -298,34 +308,3 @@ $("#clear-btn").on("click", function () {
   
 });
 
-// TODO: REFER TO THIS CLASS EXAMPLE ON HOW TO CONSTRUCT A URL FROM SIDEBAR CITIES:
-/*
-function classExample() {
-  for (var i = 0; i < repos.length; i++) {
-    var repoName = repos[i].owner.login + '/' + repos[i].name;
-
-    var repoEl = document.createElement('a');
-    repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    repoEl.setAttribute('href', './single-repo.html?repo=' + repoName);
-
-    var titleEl = document.createElement('span');
-    titleEl.textContent = repoName;
-
-    repoEl.appendChild(titleEl);
-
-    var statusEl = document.createElement('span');
-    statusEl.classList = 'flex-row align-center';
-
-    if (repos[i].open_issues_count > 0) {
-      statusEl.innerHTML =
-        "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + ' issue(s)';
-    } else {
-      statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
-    }
-
-    repoEl.appendChild(statusEl);
-
-    repoContainerEl.appendChild(repoEl);
-  }
-}
-*/
