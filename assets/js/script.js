@@ -1,21 +1,5 @@
-/* ========================================================================================================== */
-/* 
-NOTE TO REVIEWER:
-THINGS THAT WORK:
-1. Proper display of Today's Forecast (parameters include: date, icon, temp, wind, humidity)
-2. Proper display of 5 Day Forecast
-3. Cities saved to local storage in side bar, but they only display after a user enters a second search
-*/
-/* ========================================================================================================== */
-
-// TODO: 1. Figure out how to cross-reference endpoints so I can display the UV Index in Today's Forecast
-// TODO: 2. Once UV Index is working, add conditional statements that will display color options for classes like: favorable, moderate, and severe
-
-/* ================================================================================== */
-
 // These elements are necessary for local storage items in the sidebar
 var currentCity = "";
-// var lastCity = "";
 
 /* ================================================================================== */
 
@@ -52,9 +36,6 @@ var getRequestedCity = function (city) {
   // SAMPLE CITY QUERY:
   // http://api.openweathermap.org/data/2.5/weather?q=dallas&appid=e5e3b0ace283e06f86b26937890c837a
 
-  // TODO: THIS QUERY ACTUALLY HAS UV INDEX, BUT HOW DO I CROSS-REFERENCE?:
-  // https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid={API key}
-
   // Define a variable that constructs a query URL to make the API call based on city name:
   var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + openWeatherAPIKey;
 
@@ -80,11 +61,6 @@ var getRequestedCity = function (city) {
           $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
           // HUMIDITY
           $("#humidity-id").text("Humidity: " + data.main.humidity + "%");
-
-          // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
-          // DISPLAY UV INDEX
-          // $("#todays-forecast-ul").append("<li>UV Index: Unknown</li>");
-          $("#todays-forecast-ul").append("<li></li>");
 
           // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
           getFiveDayForecast(data)
@@ -268,11 +244,6 @@ $("#city-result-ul").on("click", "li", function () {
           $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
           // HUMIDITY
           $("#humidity-id").text("Humidity: " + data.main.humidity + "%");
-
-
-          // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
-          // DISPLAY UV INDEX
-
 
           // Call the 5 day forecast function here, so it can borrow elements from the getToday's weather functionality
           getFiveDayForecast(data)
