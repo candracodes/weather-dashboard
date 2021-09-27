@@ -43,7 +43,7 @@ displayCurrentDate();
 // 1. getRequestedCity() | Create a function that takes value of user entered city, and utilizes previously city variable
 var getRequestedCity = function (city) {
   city = $(".search-input").val();
-  currentCity= $('#search-input').val();
+  currentCity = $('#search-input').val();
   console.log("City value = " + city);
 
   // HOW TO CONSTRUCT A QUERY URL IN OPENWEATHER:
@@ -79,7 +79,7 @@ var getRequestedCity = function (city) {
           // WIND SPEED
           $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
           // HUMIDITY
-          $("#humidity-id").text("Humidity: " + data.main.humidity  + "%");
+          $("#humidity-id").text("Humidity: " + data.main.humidity + "%");
 
           // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
           // DISPLAY UV INDEX
@@ -130,13 +130,17 @@ function getFiveDayForecast(cityData) {
       // TEST: Display all data to examine the keys and values
       console.log('Received data:', data)
       // TEST: View the fully concatenated string in the console
-      console.log("The URL string = " + queryFiveDayURL +"?q=" + city +"&appid=" + openWeatherAPIKey);
+      console.log("The URL string = " + queryFiveDayURL + "?q=" + city + "&appid=" + openWeatherAPIKey);
       // Create empty string to use in various was for UI elements
       var constructUI = "";
       // Run a loop that construct the full blue weather card
-      $.each(data.daily.slice(1,6), function (index, val) {
+      $.each(data.daily.slice(1, 6), function (index, val) {
         // I worked through this solution with the BCS rep. I've never used Intl.DateTimeFormat but it saved me a ton of time from having to do Momentjs conversions
-        const date = Intl.DateTimeFormat("en-US", {month :"short", day: "2-digit", year:"numeric"}).format(new Date(val.dt*1000));
+        const date = Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric"
+        }).format(new Date(val.dt * 1000));
 
         console.log("The days of the week are: " + date);
         // ========================
@@ -162,7 +166,10 @@ function getFiveDayForecast(cityData) {
       $(".weather-card-container").html(constructUI);
 
       // SHOW TODAY'S FORECAST CONTAINER
-      $( ".todays-forecast-container").show();
+      $(".todays-forecast-container").show();
+
+      // SHOW CITY RESULTS HEADER
+      $(".sort-bar").show();
     }
   });
 
@@ -186,7 +193,7 @@ function storePreviousCities() {
   console.log("storePreviousCities function triggered");
   cityListEl.innerHTML += '<li>' + citySearchEl.value + '</li>';
   localStorage.setItem('StoredCities', citySearchEl.value);
-  
+
 }
 
 // STEP 3 - SHOW PREVIOUS CITIES
@@ -207,7 +214,7 @@ function viewPreviousCities() {
 viewPreviousCities();
 
 // STEP 5 — NEW EVENT LISTENER FOR LIST ITEMS IN SIDEBAR
-$("#city-result-ul").on("click", "li", function(){
+$("#city-result-ul").on("click", "li", function () {
   console.log($(this).text());
 
   var city = $(this).text();
@@ -235,7 +242,7 @@ $("#city-result-ul").on("click", "li", function(){
           // WIND SPEED
           $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
           // HUMIDITY
-          $("#humidity-id").text("Humidity: " + data.main.humidity  + "%");
+          $("#humidity-id").text("Humidity: " + data.main.humidity + "%");
 
 
           // TODO: UV Index is not a key in the queryURL parameter, so I have to use another endpoint to produce this. In the mean time...
@@ -246,10 +253,13 @@ $("#city-result-ul").on("click", "li", function(){
           getFiveDayForecast(data)
 
           // SHOW 5 DAY CONTAINER
-          $( ".weather-card" ).show();
+          $(".weather-card").show();
 
           // SHOW TODAY'S FORECAST CONTAINER
-          $( ".todays-forecast-container").show();
+          $(".todays-forecast-container").show();
+
+          // SHOW CITY RESULTS HEADER
+          $(".sort-bar").show();
 
         });
       } else {
@@ -269,15 +279,18 @@ $("#city-result-ul").on("click", "li", function(){
 $("#search-btn").on("click", function () {
   // get today's forecast (which calls the 5 day forecast inside of the function)
   getRequestedCity();
-  
+
   // DISPLAY PREVIOUSLY SEARCHED CITIES IN SIDEBAR
   storePreviousCities();
 
   // SHOW 5 DAY CONTAINER
-  $( ".weather-card" ).show();
+  $(".weather-card").show();
 
   // SHOW TODAY'S FORECAST CONTAINER
-  $( ".todays-forecast-container").show();
+  $(".todays-forecast-container").show();
+
+  // SHOW CITY RESULTS HEADER
+  $(".sort-bar").show();
 
 });
 
@@ -291,20 +304,18 @@ $("#clear-btn").on("click", function () {
   document.getElementById('city-result-h2').innerHTML = '';
 
   // HIDE TODAY'S FORECAST CONTAINER
-  $( ".todays-forecast-container").hide();
-  
-  
-  // TODO: FIGURE OUT A WAY TO CLEAR OUT THE 5 DAY FORECAST
-  $( ".weather-card" ).hide();
-  
-  
+  $(".todays-forecast-container").hide();
 
-  
+  // HIDE THE 5 DAY FORECAST
+  $(".weather-card").hide();
+
+  // HIDE CITY RESULTS HEADER
+  $(".sort-bar").hide();
+
   // CLEARING LOCAL STORAGE
   localStorage.clear();
 
   // CLEAR SIDEBAR
   document.getElementById('city-result-ul').innerHTML = '';
-  
-});
 
+});
