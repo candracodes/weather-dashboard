@@ -59,5 +59,7 @@ The following frameworks are used in this application
 * [jQuery — v3.2.1](https://api.jquery.com/)
 
 
-
+## Licensing
+The project is made possible with the following Licensing:
+- [MIT](license.txt)
 
