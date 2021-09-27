@@ -45,10 +45,11 @@ THEN I am again presented with current and future conditions for that city
 
 ## Screenshot
 
-* Here is a screenshot of my developed real application:
+* Here are the screenshots of my deployed application:
 
-![Official Screenshot](./assets/_guide/Assets/screenshot.png)
-
+![Screenshot 1](./assets/_guide/Assets/screenshot1.png)
+![Screenshot 2](./assets/_guide/Assets/screenshot2.png)
+![Screenshot 3](./assets/_guide/Assets/screenshot3.png)
 
 ## Frameworks and Libraries
 The following frameworks are used in this application
