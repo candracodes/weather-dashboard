@@ -133,6 +133,31 @@ function getFiveDayForecast(cityData) {
       console.log("The URL string = " + queryFiveDayURL + "?q=" + city + "&appid=" + openWeatherAPIKey);
       // Create empty string to use in various was for UI elements
       var constructUI = "";
+
+      // Get the uv index for the current day here
+      var uviValue = data.current.uvi;
+
+      // Update the element that should hold it in the HTML
+      $("#uvi-id").html("UV Index: " + uviValue);
+
+      // if UV Index is 0 - 3 (low)
+      if (uviValue <= 3){
+        $("#uvi-id").css({"background-color": "green", "color": "white"});
+        $("#condition-color").css({"color": "green"});
+      }
+
+      // if UV Index 3 - 5 (moderate)
+      if (uviValue > 3 && uviValue < 6){
+        $("#uvi-id").css({"background-color": "yellow", "color": "black"});
+        $("#condition-color").css({"color": "yellow"});
+      }
+      
+      // if UV Index is > 6 (high)
+      if (uviValue >= 6){
+        $("#uvi-id").css({"background-color": "red", "color": "black"});
+        $("#condition-color").css({"color": "red"});
+      }
+
       // Run a loop that construct the full blue weather card
       $.each(data.daily.slice(1, 6), function (index, val) {
         // I worked through this solution with the BCS rep. I've never used Intl.DateTimeFormat but it saved me a ton of time from having to do Momentjs conversions
