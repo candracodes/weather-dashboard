@@ -56,7 +56,7 @@ var getRequestedCity = function (city) {
           // DISPLAY ICON
           $("#temp-icon-id").html(imgIcon);
           // TEMP
-          $("#temperature-id").text("Temperature: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)));
+          $("#temperature-id").text("Temperature: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)) + "° F");
           // WIND SPEED
           $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
           // HUMIDITY
@@ -239,7 +239,7 @@ $("#city-result-ul").on("click", "li", function () {
           // DISPLAY ICON
           $("#temp-icon-id").html(imgIcon);
           // TEMP
-          $("#temperature-id").text("Temperature: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)));
+          $("#temperature-id").text("Temperature: " + Math.floor(((data.main.temp - 273.15) * 9 / 5 + 32)) + "° F");
           // WIND SPEED
           $("#wind-speed-id").text("Wind Speed: " + data.wind.speed + " mph");
           // HUMIDITY

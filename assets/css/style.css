@@ -18,7 +18,7 @@
     13. Wave background
     14. Search Form
     15. Weather Cards
-    16. Condition Color
+    16. Media Queries
     17. 0ther
   
     ----------------------------------
@@ -2675,5 +2675,37 @@ footer .footer-social li a {
 }
 
 /*  ----------------------------------
-    16. Other
+    16. MEDIA QUERIES
+    ---------------------------------- */
+
+/* MOBILE -- LARGE */
+@media (max-width: 425px) {
+    .weather-card {
+        width:100%;
+    }
+    #sidebar-status {
+        overflow: visible;
+    }
+    .filters {
+        display: contents;
+        width: 100%;
+    }
+}
+
+/* TABLET -- VERTICAL */
+@media (max-width: 768px) {
+    .weather-card {
+        width:100%;
+    }
+    #sidebar-status {
+        overflow: visible;
+    }
+    .filters {
+        display: contents;
+        width: 100%;
+    }
+}
+
+/*  ----------------------------------
+    17. OTHER
     ---------------------------------- */
